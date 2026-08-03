@@ -82,6 +82,38 @@ Description: Allow ECS agents to connect to Jenkins
 ## 🏗️ 0. ECS Infrastructure Setup
 
 ### Create ECS Cluster
+### updates script
+```
+#!/bin/bash
+# Create ECS Cluster for Jenkins with Service-Linked Role setup
+
+CLUSTER_NAME="jenkins-ecs-cluster"
+REGION="ap-southeast-2"
+
+echo "🔐 Ensuring ECS Service-Linked Role exists..."
+
+# Create the service-linked role if it doesn't exist
+# If it already exists, this will return an error which we ignore
+aws iam create-service-linked-role --aws-service-name ecs.amazonaws.com 2>/dev/null || true
+
+echo "🚀 Creating ECS Cluster: $CLUSTER_NAME"
+
+# Create ECS Cluster
+aws ecs create-cluster \
+    --cluster-name $CLUSTER_NAME \
+    --region $REGION \
+    --capacity-providers FARGATE \
+    --default-capacity-provider-strategy capacityProvider=FARGATE,weight=1 \
+    --settings name=containerInsights,value=enabled
+
+if [ $? -eq 0 ]; then
+    echo "✅ ECS Cluster created successfully!"
+    echo "Cluster ARN: $(aws ecs describe-clusters --clusters $CLUSTER_NAME --region $REGION --query 'clusters[0].clusterArn' --output text)"
+else
+    echo "❌ Failed to create ECS Cluster."
+    exit 1
+fi   
+```
 
 #### Using AWS CLI
 ```bash
