@@ -1374,6 +1374,17 @@ print(json.dumps(data, indent=2))
     }
 }
 ```
+### create log groups 
+```
+aws logs create-log-group \
+  --log-group-name /ecs/jenkins-agent \
+  --region ap-southeast-2
+
+aws logs describe-log-groups \
+  --log-group-name-prefix /ecs/jenkins-agent \
+  --region ap-southeast-2
+```
+
 
 ### **How to Use This Test Pipeline:**
 
