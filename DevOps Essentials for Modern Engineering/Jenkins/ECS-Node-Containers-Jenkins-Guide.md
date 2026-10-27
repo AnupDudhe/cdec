@@ -88,7 +88,7 @@ Description: Allow ECS agents to connect to Jenkins
 # Create ECS Cluster for Jenkins with Service-Linked Role setup
 
 CLUSTER_NAME="jenkins-ecs-cluster"
-REGION="ap-southeast-2"
+REGION="us-east-1"
 
 echo "🔐 Ensuring ECS Service-Linked Role exists..."
 
